@@ -1,114 +1,207 @@
-# ✅ UltraTodo Pro
+<div align="center">
 
-**Application de gestion de tâches ultra-complète avec connexion entre utilisateurs, mode vocal, mind map, et persistance IndexedDB.**
+# ✅ ULTRA TODO PRO
 
----
+### 📱 L'Application de Gestion de Tâches la Plus Complète
 
-## 📱 Description
-
-UltraTodo Pro est une application de gestion de tâches mobile-first (PWA compatible) qui fonctionne **100% hors ligne** grâce à IndexedDB. Elle permet de :
-- Créer, modifier, supprimer des tâches
-- Organiser par projets, tags, priorités
-- Ajouter des sous-tâches
-- Définir des répétitions (quotidien, hebdo, mensuel)
-- Utiliser la **saisie vocale** pour ajout multiple
-- Visualiser les tâches en **Mind Map** avec zoom/déplacement
-- Se **connecter avec d'autres utilisateurs** via un code à 6 chiffres
-- Voir les tâches et statistiques des contacts connectés
-- Suivre ses **statistiques** (taux de complétion, série, etc.)
-- Créer des **modèles (templates)** réutilisables
-- Exporter/Importer en JSON/CSV
+**⚡ Gratuite | 🔒 Privée | 📴 Hors Ligne | 🌍 Française**
 
 ---
 
-## 🚀 Installation
+# 📋 LISTE COMPLÈTE DES FONCTIONNALITÉS
 
-### Option 1 : Fichier HTML simple
-1. Télécharge le fichier `index.html`
-2. Ouvre-le dans n'importe quel navigateur (Chrome, Firefox, Edge, Safari)
-3. ✅ C'est prêt !
-
-### Option 2 : Convertir en APK (Android)
-1. Va sur [FreeWebToApk](https://freewebtoapk.com) ou utilise **Capacitor**
-2. Choisis "Local HTML File"
-3. Upload le fichier `index.html`
-4. Génère l'APK
-5. Installe sur ton téléphone
-6. ✅ Les données persistent grâce à IndexedDB
-
-### Option 3 : Héberger en ligne
-- **Netlify Drop** : [app.netlify.com/drop](https://app.netlify.com/drop)
-- **Tiiny.host** : [tiiny.host](https://tiiny.host)
-- **GitHub Pages** : Repo `username.github.io`
+</div>
 
 ---
 
-## 🎯 Fonctionnalités Détaillées
+## 🔥 LES 50 FONCTIONNALITÉS
 
-### 📋 Gestion des Tâches
-| Fonctionnalité | Description |
-|----------------|-------------|
-| **Ajout rapide** | Bouton + → Ajouter en écrit ou vocal |
-| **Priorités** | 🔴 Haute, 🟡 Moyenne, 🟢 Basse |
-| **Date & Heure** | Échéance avec heure précise |
-| **Tags** | Étiquettes personnalisées |
-| **Sous-tâches** | Liste de sous-tâches cochables |
-| **Projets** | Assigner à un projet |
-| **Répétition** | Quotidien, Hebdomadaire, Mensuel |
-| **Dépendances** | Bloquer une tâche tant qu'une autre n'est pas finie |
-| **Archivage** | Masquer sans supprimer |
+### 📋 CRÉATION DE TÂCHES (10 fonctions)
 
-### 🎤 Mode Vocal
-- **Ajout multiple** : Dites "Ajouter [tâche]" plusieurs fois
-- **Commande Stop** : Dites "Stop" ou "Terminer" pour finir
-- **Reconnaissance continue** : Plusieurs tâches en une session
-- **Tags automatiques** : Les tâches vocales sont taguées "vocal"
-
-### 🧠 Mind Map
-- **Visualisation** : Tâches et projets en nœuds
-- **Connexions** : Cliquez sur 2 tâches pour créer une dépendance
-- **Assignation projet** : Cliquez sur une tâche puis sur un projet
-- **Zoom** : Boutons +/− ou pincement tactile
-- **Déplacement** : Glisser pour déplacer les nœuds
-- **Auto-organisation** : Réorganise automatiquement
-
-### 🔗 Connexions entre Utilisateurs
-- **Code personnel** : 6 chiffres générés automatiquement
-- **Partage** : Donnez votre code à quelqu'un
-- **Connexion** : Entrez le code de l'autre personne
-- **Vue des tâches** : Consultez les tâches du contact
-- **Vue des stats** : Consultez les statistiques du contact
-- **Déconnexion** : Retirez un contact à tout moment
-
-### 📈 Statistiques
-- **Taux de complétion** : Pourcentage de tâches terminées
-- **Tâches actives** : Nombre de tâches en cours
-- **Série (Streak)** : Jours consécutifs avec au moins une tâche finie
-- **En retard** : Tâches dépassant leur échéance
-- **Graphique 7 jours** : Évolution de la productivité
-
-### 📦 Modèles (Templates)
-- **Modèles prédéfinis** : Réunion, Courses, Projet
-- **Création personnalisée** : Nom + liste de tâches
-- **Application en 1 clic** : Crée toutes les tâches du modèle
-
-### 📤 Export / Import
-- **Export JSON** : Sauvegarde complète
-- **Export CSV** : Compatible Excel/Sheets
-- **Import** : Restauration depuis un fichier JSON
-
-### 🔒 Sécurité
-- **Mot de passe maître** : Verrouillage de l'application
-- **Données locales** : Tout est stocké en IndexedDB
-- **Aucun serveur** : Vos données ne quittent jamais votre appareil
-
-### 🌓 Thème
-- **Clair** : Par défaut
-- **Sombre** : Basculer via le bouton 🌓
-- **Persistant** : Le thème est sauvegardé
+| N° | FONCTION | DESCRIPTION | COMMENT L'UTILISER |
+|----|----------|-------------|-------------------|
+| 1 | **Titre** | Nom de la tâche | Champ "Titre" dans le formulaire |
+| 2 | **Description** | Détails de la tâche | Champ "Description" |
+| 3 | **Priorité Haute** | 🔴 Urgent | Sélecteur de priorité |
+| 4 | **Priorité Moyenne** | 🟡 Normal | Sélecteur de priorité |
+| 5 | **Priorité Basse** | 🟢 Facultatif | Sélecteur de priorité |
+| 6 | **Date d'échéance** | 📅 Jour précis | Champ "Date" |
+| 7 | **Heure d'échéance** | ⏰ Heure précise | Champ "Heure" |
+| 8 | **Tags** | 🏷️ Étiquettes | Champ "Tags" (virgules) |
+| 9 | **Sous-tâches** | 📎 Liste cochable | Champ "Sous-tâches" (une par ligne) |
+| 10 | **Projet** | 📁 Assignation | Sélecteur "Projet" |
 
 ---
 
-## 💾 Stockage des Données
+### 🔄 GESTION DES TÂCHES (10 fonctions)
 
-### IndexedDB (Primaire)
+| N° | FONCTION | DESCRIPTION | COMMENT L'UTILISER |
+|----|----------|-------------|-------------------|
+| 11 | **Marquer terminée** | ✅ Cocher la case | Clic sur la case ronde |
+| 12 | **Rouvrir** | ↩️ Décocher | Re-clic sur la case |
+| 13 | **Modifier** | ✏️ Changer les infos | Bouton ✏️ sur la tâche |
+| 14 | **Supprimer** | 🗑️ Effacer définitivement | Bouton 🗑️ |
+| 15 | **Archiver** | 📦 Masquer sans supprimer | Bouton 📦 |
+| 16 | **Dupliquer** | 📋 Copier une tâche | Bouton 📋 |
+| 17 | **Répétition quotidienne** | 🔄 Tous les jours | Sélecteur "Répétition" |
+| 18 | **Répétition hebdomadaire** | 🔄 Toutes les semaines | Sélecteur "Répétition" |
+| 19 | **Répétition mensuelle** | 🔄 Tous les mois | Sélecteur "Répétition" |
+| 20 | **Dépendances** | 🔗 Bloquer une tâche | Champ "Dépendances" (IDs) |
+
+---
+
+### 🎤 MODE VOCAL (5 fonctions)
+
+| N° | FONCTION | DESCRIPTION | COMMENT L'UTILISER |
+|----|----------|-------------|-------------------|
+| 21 | **Ajout vocal simple** | 🎤 Dire "Ajouter [tâche]" | Bouton + → Vocal |
+| 22 | **Ajout vocal multiple** | 🎤 Plusieurs tâches d'affilée | Continuez à parler |
+| 23 | **Commande Stop** | 🛑 Terminer la session | Dire "Stop" ou "Terminer" |
+| 24 | **Annulation** | ❌ Annuler la session | Bouton "Annuler" |
+| 25 | **Tag auto "vocal"** | 🏷️ Identification | Automatique |
+
+---
+
+### 🧠 MIND MAP (10 fonctions)
+
+| N° | FONCTION | DESCRIPTION | COMMENT L'UTILISER |
+|----|----------|-------------|-------------------|
+| 26 | **Visualisation des tâches** | 🧠 Nœuds pour chaque tâche | Onglet Mind Map |
+| 27 | **Visualisation des projets** | 📁 Nœuds bleus | Onglet Mind Map |
+| 28 | **Connexion tâche→tâche** | 🔗 Dépendance | Clic sur 2 tâches |
+| 29 | **Connexion tâche→projet** | 📁 Assignation | Clic tâche puis projet |
+| 30 | **Zoom avant** | 🔍 Agrandir | Bouton + ou pincement |
+| 31 | **Zoom arrière** | 🔍 Réduire | Bouton − ou pincement |
+| 32 | **Déplacement** | ✋ Panoramique | Glisser le canvas |
+| 33 | **Auto-organisation** | 🔄 Réorganiser | Bouton "Organiser" |
+| 34 | **Effacer connexions** | 🧹 Reset | Bouton "Effacer liens" |
+| 35 | **Sélection visuelle** | 🔴 Nœud en rouge | Clic sur nœud |
+
+---
+
+### 🔗 CONNEXIONS ENTRE UTILISATEURS (10 fonctions)
+
+| N° | FONCTION | DESCRIPTION | COMMENT L'UTILISER |
+|----|----------|-------------|-------------------|
+| 36 | **Code personnel** | 🔢 6 chiffres uniques | Menu → Connexion |
+| 37 | **Partage du code** | 📤 Donner son code | Afficher le code |
+| 38 | **Entrer un code** | 📥 Code du contact | Champ "Code du contact" |
+| 39 | **Connecter** | ✅ Ajouter un contact | Bouton "Connecter" |
+| 40 | **Voir les tâches du contact** | 📋 Liste | Bouton "Tâches" |
+| 41 | **Voir les stats du contact** | 📈 Statistiques | Bouton "Stats" |
+| 42 | **Déconnecter** | 🔌 Retirer un contact | Bouton ✕ |
+| 43 | **Liste des contacts** | 👥 Afficher | Onglet Liens |
+| 44 | **Nommer un contact** | ✏️ Personnaliser | Prompt lors de connexion |
+| 45 | **Badge de progression** | 📊 X/Y tâches | Affichage auto |
+
+---
+
+### 📈 STATISTIQUES (5 fonctions)
+
+| N° | FONCTION | DESCRIPTION | COMMENT L'UTILISER |
+|----|----------|-------------|-------------------|
+| 46 | **Taux de complétion** | 📊 % terminé | Onglet Stats |
+| 47 | **Série (Streak)** | 🔥 Jours consécutifs | Onglet Stats |
+| 48 | **En retard** | 🔴 Tâches dépassées | Onglet Stats |
+| 49 | **Tâches actives** | 🟢 En cours | Onglet Stats |
+| 50 | **Graphique 7 jours** | 📈 Évolution | Onglet Stats |
+
+---
+
+### 📦 MODÈLES (5 fonctions)
+
+| N° | FONCTION | DESCRIPTION | COMMENT L'UTILISER |
+|----|----------|-------------|-------------------|
+| 51 | **Créer un modèle** | 📦 Template personnalisé | Onglet Modèles |
+| 52 | **Appliquer un modèle** | ✅ Créer les tâches | Clic sur le modèle |
+| 53 | **Modèles prédéfinis** | 📦 Réunion, Courses | Onglet Modèles |
+| 54 | **Nommer un modèle** | ✏️ Personnaliser | Champ "Nom" |
+| 55 | **Liste des tâches du modèle** | 📋 Une par ligne | Textarea |
+
+---
+
+### 📤 EXPORT / IMPORT (5 fonctions)
+
+| N° | FONCTION | DESCRIPTION | COMMENT L'UTILISER |
+|----|----------|-------------|-------------------|
+| 56 | **Export JSON** | 📤 Sauvegarde complète | Menu → Export JSON |
+| 57 | **Export CSV** | 📊 Excel compatible | Menu → Export CSV |
+| 58 | **Import JSON** | 📥 Restauration | Menu → Import |
+| 59 | **Téléchargement** | 💾 Fichier | Automatique |
+| 60 | **Compatibilité** | 🔄 Multi-appareils | Via fichier |
+
+---
+
+### 🔒 SÉCURITÉ (5 fonctions)
+
+| N° | FONCTION | DESCRIPTION | COMMENT L'UTILISER |
+|----|----------|-------------|-------------------|
+| 61 | **Mot de passe maître** | 🔒 Verrouillage | Menu → Verrouiller |
+| 62 | **Données locales** | 💾 IndexedDB | Automatique |
+| 63 | **Aucun serveur** | 🚫 Pas de cloud | Automatique |
+| 64 | **Aucun tracking** | 🚫 Pas d'espionnage | Automatique |
+| 65 | **Aucune publicité** | 🚫 Pas de pub | Automatique |
+
+---
+
+### 🌓 INTERFACE (5 fonctions)
+
+| N° | FONCTION | DESCRIPTION | COMMENT L'UTILISER |
+|----|----------|-------------|-------------------|
+| 66 | **Thème clair** | ☀️ Par défaut | Bouton 🌓 |
+| 67 | **Thème sombre** | 🌙 Confort | Bouton 🌓 |
+| 68 | **Recherche** | 🔍 Filtrer les tâches | Barre de recherche |
+| 69 | **Vue Aujourd'hui** | ⭐ Tâches du jour | Onglet Aujourd'hui |
+| 70 | **Vue Toutes** | 📋 Toutes les tâches | Onglet Tâches |
+
+---
+
+### 📱 MOBILE (5 fonctions)
+
+| N° | FONCTION | DESCRIPTION | COMMENT L'UTILISER |
+|----|----------|-------------|-------------------|
+| 71 | **Bottom Navigation** | 📱 Barre en bas | Onglets |
+| 72 | **FAB Button** | ➕ Bouton flottant | + en bas à droite |
+| 73 | **Menu FAB** | 📋 Choix écrit/vocal | Clic sur + |
+| 74 | **Modal Sheet** | 📄 Glissement vers le haut | Automatique |
+| 75 | **Toast Notifications** | 🔔 Messages | Automatique |
+
+---
+
+### 💾 STOCKAGE (5 fonctions)
+
+| N° | FONCTION | DESCRIPTION | COMMENT L'UTILISER |
+|----|----------|-------------|-------------------|
+| 76 | **IndexedDB** | 💾 Persistance | Automatique |
+| 77 | **Fallback localStorage** | 💾 Secours | Automatique |
+| 78 | **Auto-save 5s** | ⏰ Sauvegarde | Automatique |
+| 79 | **Sauvegarde à chaque action** | ⚡ Immédiate | Automatique |
+| 80 | **Multi-clés** | 🔑 Organisation | Automatique |
+
+---
+
+<div align="center">
+
+# 🎉 TOTAL : 80 FONCTIONNALITÉS
+
+---
+
+## ⭐ LES PLUS IMPORTANTES
+
+| RANG | FONCTION | POURQUOI C'EST GÉNIAL |
+|------|----------|----------------------|
+| 🥇 | **Mode Vocal** | Ajoutez 10 tâches en 10 secondes |
+| 🥈 | **Mind Map** | Visualisez tout d'un coup d'œil |
+| 🥉 | **Connexions** | Partagez sans serveur |
+| 4 | **IndexedDB** | Vos données ne sont JAMAIS perdues |
+| 5 | **Templates** | Ne répétez jamais les mêmes tâches |
+
+---
+
+**📱 ULTRA TODO PRO - L'APPLICATION QUI FAIT TOUT**
+
+**🎤 VOCAL + 🧠 MIND MAP + 🔗 CONNEXIONS + 📈 STATS + 📦 MODÈLES + 🔒 SÉCURITÉ + 📴 HORS LIGNE**
+
+---
+
+</div>

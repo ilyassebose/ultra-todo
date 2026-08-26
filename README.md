@@ -4,7 +4,7 @@
 
 ### 📱 L'Application de Gestion de Tâches la Plus Complète
 
-**⚡ Gratuite | 🔒 Privée | 📴 Hors Ligne | 🌍 Française**
+**⚡ Gratuite | 🔒 Privée | 📴 Hors Ligne | 🌍 Maroc**
 
 ---
 

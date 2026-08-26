@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>UltraTodo</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --primary: #6c5ce7;
@@ -61,7 +62,6 @@
             font-size: 1.1rem; color: var(--text-secondary);
             box-shadow: var(--shadow-sm);
         }
-        .btn-icon:active { transform: scale(0.9); }
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
             background: var(--card);
@@ -84,7 +84,6 @@
             box-shadow: 0 4px 15px rgba(108, 92, 231, 0.5);
             display: flex; align-items: center; justify-content: center;
         }
-        .fab:active { transform: scale(0.9); }
         .fab-menu {
             position: fixed; bottom: 140px; right: 20px; z-index: 59;
             display: none; flex-direction: column; gap: 10px;
@@ -110,7 +109,6 @@
             border-left: 3px solid var(--primary-light);
             box-shadow: var(--shadow-sm); transition: var(--transition);
         }
-        .task-card:active { transform: scale(0.98); }
         .task-card.overdue { border-left-color: var(--danger); }
         .task-card.completed { opacity: 0.6; border-left-color: var(--success); }
         .task-card.blocked { border-left-color: var(--warning); }
@@ -169,10 +167,8 @@
             display: inline-flex; align-items: center; justify-content: center;
             gap: 6px; width: 100%;
         }
-        .btn:active { transform: scale(0.97); }
         .btn-primary { background: var(--primary); color: white; border-color: var(--primary); }
         .btn-danger { background: var(--danger); color: white; border-color: var(--danger); }
-        .btn-success { background: var(--success); color: white; border-color: var(--success); }
         .search-bar {
             background: var(--card); border-radius: 16px; padding: 10px 14px;
             display: flex; align-items: center; gap: 10px;
@@ -205,83 +201,27 @@
         }
         .menu-item .menu-icon { font-size: 1.1rem; width: 24px; text-align: center; }
         .menu-divider { height: 1px; background: var(--border); margin: 6px 0; }
-        .connection-banner {
-            background: var(--primary-light); border-radius: var(--radius);
-            padding: 12px; margin-bottom: 15px;
-            display: flex; align-items: center; gap: 10px;
-            font-size: 0.8rem; color: var(--primary-dark);
-        }
         .code-display {
             font-size: 2rem; font-weight: 700; letter-spacing: 5px;
             color: var(--primary); text-align: center; padding: 15px;
             background: var(--bg); border-radius: var(--radius-sm); margin: 10px 0;
         }
-        .peer-badge { background: var(--success); color: white; padding: 3px 8px; border-radius: 8px; font-size: 0.6rem; font-weight: 600; }
-        .voice-modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: 200;
-            justify-content: center; align-items: center;
-        }
-        .voice-modal-overlay.active { display: flex; }
-        .voice-modal {
-            background: var(--card); border-radius: 24px; padding: 25px;
-            width: 90%; max-width: 400px; text-align: center;
-        }
-        .voice-pulse {
-            width: 80px; height: 80px; border-radius: 50%;
-            background: var(--primary); margin: 0 auto 20px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; color: white; animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(108,92,231,0.5); }
-            50% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(108,92,231,0); }
-        }
-        .voice-text { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
-        .voice-transcript {
-            background: var(--bg); border-radius: 12px; padding: 12px;
-            font-size: 1rem; margin-bottom: 15px; min-height: 50px; max-height: 100px; overflow-y: auto;
-        }
-        .voice-tasks-added { text-align: left; margin-bottom: 15px; max-height: 150px; overflow-y: auto; }
-        .voice-task-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 0.85rem; }
-        .voice-task-item .check { color: var(--success); font-weight: bold; }
+        .analytics-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-box { background: var(--card); border-radius: 12px; padding: 15px; text-align: center; box-shadow: var(--shadow-sm); }
+        .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+        canvas { width: 100% !important; height: auto !important; }
         .mindmap-container {
             position: relative; background: var(--bg);
             border-radius: var(--radius); border: 1px solid var(--border);
             height: 50vh; width: 100%; overflow: hidden; touch-action: none;
         }
-        .mindmap-zoom-controls {
-            position: absolute; bottom: 15px; right: 15px;
-            display: flex; flex-direction: column; gap: 8px; z-index: 10;
-        }
-        .zoom-btn {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: var(--card); border: 1px solid var(--border);
-            font-size: 1.2rem; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: var(--shadow); color: var(--text);
-        }
-        .mindmap-node {
-            position: absolute; background: var(--card);
-            border: 2px solid var(--primary); border-radius: 10px;
-            padding: 8px 12px; font-size: 0.75rem; cursor: pointer;
-            user-select: none; white-space: nowrap; max-width: 160px;
-            overflow: hidden; text-overflow: ellipsis;
-            box-shadow: var(--shadow-sm); touch-action: none;
-        }
+        .mindmap-zoom-controls { position: absolute; bottom: 15px; right: 15px; display: flex; flex-direction: column; gap: 8px; z-index: 10; }
+        .zoom-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); color: var(--text); }
+        .mindmap-node { position: absolute; background: var(--card); border: 2px solid var(--primary); border-radius: 10px; padding: 8px 12px; font-size: 0.75rem; cursor: pointer; user-select: none; white-space: nowrap; max-width: 160px; overflow: hidden; text-overflow: ellipsis; box-shadow: var(--shadow-sm); }
         .mindmap-node.selected { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(225,112,85,0.3); }
         .mindmap-node.project-node { border-color: var(--info); background: #e8f4fd; }
-        .analytics-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .stat-box {
-            background: var(--card); border-radius: 12px; padding: 15px;
-            text-align: center; box-shadow: var(--shadow-sm);
-        }
-        .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
-        .stat-label { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
-        canvas { width: 100% !important; height: auto !important; }
-        @media (max-width: 768px) {
-            .form-row { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -297,16 +237,13 @@
     <div class="menu-dropdown" id="menuDropdown">
         <button class="menu-item" onclick="app.openConnectionModal();app.toggleMenu(event)"><span class="menu-icon">🔗</span> Connexion</button>
         <button class="menu-item" onclick="app.switchView('mindmap');app.toggleMenu(event)"><span class="menu-icon">🧠</span> Mind Map</button>
-        <button class="menu-item" onclick="app.switchView('analytics');app.toggleMenu(event)"><span class="menu-icon">📈</span> Statistiques</button>
+        <button class="menu-item" onclick="app.switchView('analytics');app.toggleMenu(event)"><span class="menu-icon">📈</span> Stats</button>
         <button class="menu-item" onclick="app.switchView('projects');app.toggleMenu(event)"><span class="menu-icon">📁</span> Projets</button>
         <button class="menu-item" onclick="app.switchView('templates');app.toggleMenu(event)"><span class="menu-icon">📦</span> Modèles</button>
         <div class="menu-divider"></div>
         <button class="menu-item" onclick="app.exportData('json');app.toggleMenu(event)"><span class="menu-icon">📤</span> Export JSON</button>
         <button class="menu-item" onclick="app.exportData('csv');app.toggleMenu(event)"><span class="menu-icon">📊</span> Export CSV</button>
         <button class="menu-item" onclick="app.importData();app.toggleMenu(event)"><span class="menu-icon">📥</span> Import</button>
-        <div class="menu-divider"></div>
-        <button class="menu-item" onclick="app.openSettings();app.toggleMenu(event)"><span class="menu-icon">⚙️</span> Paramètres</button>
-        <button class="menu-item" onclick="app.lockApp();app.toggleMenu(event)"><span class="menu-icon">🔒</span> Verrouiller</button>
     </div>
 
     <main class="main-content" id="mainContent"></main>
@@ -330,185 +267,65 @@
     <div class="toast" id="toast"></div>
 
 <script>
-// ==================== INDEXEDDB STORAGE ====================
-class IndexedDBStorage {
-    constructor() {
-        this.dbName = 'UltraTodoDB';
-        this.dbVersion = 1;
-        this.db = null;
-        this.ready = this.init();
+// ============================================
+// SUPABASE CONFIGURATION
+// ============================================
+const SUPABASE_URL = 'https://atksislfvshlpheosnqr.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0a3Npc2xmdnNobHBoZW9zbnFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3Mzg0MzAsImV4cCI6MjEwMzMxNDQzMH0.2DtgmVhxRRxOwJY_ZVnwPJWj5E8YnIlszpVl7_tBAsw';
+
+let supabaseClient = null;
+try {
+    if (typeof window.supabase !== 'undefined') {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
-    init() {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(this.dbName, this.dbVersion);
-            request.onupgradeneeded = (e) => {
-                const db = e.target.result;
-                if (!db.objectStoreNames.contains('appData')) {
-                    db.createObjectStore('appData', { keyPath: 'id' });
-                }
-            };
-            request.onsuccess = (e) => {
-                this.db = e.target.result;
-                resolve();
-            };
-            request.onerror = (e) => {
-                console.error('IndexedDB error:', e);
-                reject(e);
-            };
-        });
-    }
-    async get(key) {
-        await this.ready;
-        return new Promise((resolve, reject) => {
-            const tx = this.db.transaction('appData', 'readonly');
-            const store = tx.objectStore('appData');
-            const request = store.get(key);
-            request.onsuccess = () => resolve(request.result ? request.result.value : null);
-            request.onerror = () => reject(request.error);
-        });
-    }
-    async set(key, value) {
-        await this.ready;
-        return new Promise((resolve, reject) => {
-            const tx = this.db.transaction('appData', 'readwrite');
-            const store = tx.objectStore('appData');
-            const request = store.put({ id: key, value: value });
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
-    }
-    async delete(key) {
-        await this.ready;
-        return new Promise((resolve, reject) => {
-            const tx = this.db.transaction('appData', 'readwrite');
-            const store = tx.objectStore('appData');
-            const request = store.delete(key);
-            request.onsuccess = () => resolve();
-            request.onerror = () => reject(request.error);
-        });
-    }
-    async getAll() {
-        await this.ready;
-        return new Promise((resolve, reject) => {
-            const tx = this.db.transaction('appData', 'readonly');
-            const store = tx.objectStore('appData');
-            const request = store.getAll();
-            request.onsuccess = () => {
-                const result = {};
-                request.result.forEach(item => { result[item.id] = item.value; });
-                resolve(result);
-            };
-            request.onerror = () => reject(request.error);
-        });
-    }
-}
+} catch(e) { console.log('Mode local sans Supabase'); }
 
 class UltraTodoApp {
     constructor() {
-        this.storage = new IndexedDBStorage();
-        this.data = null;
+        this.data = this.loadData();
         this.currentView = 'today';
-        this.theme = 'light';
+        this.theme = localStorage.getItem('todoTheme') || 'light';
         this.isListening = false;
         this.recognition = null;
         this.voiceTasks = [];
-        this.connectedPeers = [];
-        this.myCode = '';
-        this.mindMapZoom = 1;
-        this.mindMapPanX = 0;
-        this.mindMapPanY = 0;
-        this.mindMapConnectingFrom = null;
-        this.mindMapNodePositions = {};
-        this.peersData = {};
+        this.connectedPeers = JSON.parse(localStorage.getItem('connectedPeers') || '[]');
+        this.myCode = localStorage.getItem('myConnectionCode') || this.generateCode();
+        this.peersData = JSON.parse(localStorage.getItem('peersData') || '{}');
         this.init();
     }
 
-    async init() {
-        // Charger depuis IndexedDB
-        try {
-            const savedData = await this.storage.get('todoData');
-            this.data = savedData || { tasks: [], projects: [], templates: [], settings: { pomodoroLength: 25, masterPassword: null } };
-            const savedTheme = await this.storage.get('theme');
-            this.theme = savedTheme || 'light';
-            const savedCode = await this.storage.get('connectionCode');
-            this.myCode = savedCode || this.generateConnectionCode();
-            const savedPeers = await this.storage.get('peers');
-            this.connectedPeers = savedPeers || [];
-            const savedPeersData = await this.storage.get('peersData');
-            this.peersData = savedPeersData || {};
-        } catch(e) {
-            console.log('IndexedDB non disponible, fallback localStorage');
-            this.data = JSON.parse(localStorage.getItem('ultraTodoData') || 'null') || { tasks: [], projects: [], templates: [], settings: { pomodoroLength: 25, masterPassword: null } };
-            this.theme = localStorage.getItem('todoTheme') || 'light';
-            this.myCode = localStorage.getItem('myConnectionCode') || this.generateConnectionCode();
-            this.connectedPeers = JSON.parse(localStorage.getItem('connectedPeers') || '[]');
-            this.peersData = JSON.parse(localStorage.getItem('peersData') || '{}');
-        }
-        
+    init() {
         this.applyTheme();
-        this.setupVoiceRecognition();
+        this.setupVoice();
         this.render();
-        this.setupAutoSave();
-        this.checkReminders();
-        
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.menu-dropdown') && !e.target.closest('.btn-icon')) {
-                document.getElementById('menuDropdown').classList.remove('active');
-            }
-        });
+        this.autoSave();
     }
 
-    async saveData() {
-        try {
-            await this.storage.set('todoData', this.data);
-            await this.storage.set('theme', this.theme);
-            await this.storage.set('connectionCode', this.myCode);
-            await this.storage.set('peers', this.connectedPeers);
-            await this.storage.set('peersData', this.peersData);
-        } catch(e) {
-            // Fallback localStorage
-            localStorage.setItem('ultraTodoData', JSON.stringify(this.data));
-            localStorage.setItem('todoTheme', this.theme);
-            localStorage.setItem('myConnectionCode', this.myCode);
-            localStorage.setItem('connectedPeers', JSON.stringify(this.connectedPeers));
-            localStorage.setItem('peersData', JSON.stringify(this.peersData));
-        }
+    loadData() {
+        const saved = localStorage.getItem('ultraTodoData');
+        if (saved) { try { return JSON.parse(saved); } catch(e) {} }
+        return { tasks: [], projects: [], templates: [], settings: {} };
     }
 
-    setupAutoSave() { setInterval(() => this.saveData(), 5000); }
+    saveData() { localStorage.setItem('ultraTodoData', JSON.stringify(this.data)); }
+    autoSave() { setInterval(() => this.saveData(), 5000); }
     generateId() { return 'id_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5); }
-
-    generateConnectionCode() {
-        let code = '';
-        // Essayer IndexedDB d'abord
-        try {
-            this.storage.get('connectionCode').then(saved => {
-                if (saved) code = saved;
-                else {
-                    code = Math.floor(100000 + Math.random() * 900000).toString();
-                    this.storage.set('connectionCode', code);
-                }
-            });
-        } catch(e) {
-            code = localStorage.getItem('myConnectionCode') || Math.floor(100000 + Math.random() * 900000).toString();
-            localStorage.setItem('myConnectionCode', code);
-        }
-        return code || Math.floor(100000 + Math.random() * 900000).toString();
+    generateCode() {
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        localStorage.setItem('myConnectionCode', code);
+        return code;
     }
 
-    showToast(message) {
+    showToast(msg) {
         const toast = document.getElementById('toast');
-        toast.textContent = message;
+        toast.textContent = msg;
         toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2500);
+        setTimeout(() => toast.classList.remove('show'), 2000);
     }
-    toggleTheme() {
-        this.theme = this.theme === 'light' ? 'dark' : 'light';
-        this.applyTheme();
-        this.saveData();
-    }
+
+    toggleTheme() { this.theme = this.theme === 'light' ? 'dark' : 'light'; localStorage.setItem('todoTheme', this.theme); this.applyTheme(); }
     applyTheme() { if (this.theme === 'dark') document.body.classList.add('dark-theme'); else document.body.classList.remove('dark-theme'); }
-    toggleMenu(event) { event.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('active'); }
+    toggleMenu(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('active'); }
     toggleFabMenu() {
         const menu = document.getElementById('fabMenu');
         const backdrop = document.getElementById('fabBackdrop');
@@ -518,23 +335,17 @@ class UltraTodoApp {
         backdrop.classList.toggle('active');
         btn.textContent = active ? '+' : '✕';
     }
-    closeFabMenu() {
-        document.getElementById('fabMenu').classList.remove('active');
-        document.getElementById('fabBackdrop').classList.remove('active');
-        document.getElementById('fabBtn').textContent = '+';
-    }
-    switchView(view, element) {
+    closeFabMenu() { document.getElementById('fabMenu').classList.remove('active'); document.getElementById('fabBackdrop').classList.remove('active'); document.getElementById('fabBtn').textContent = '+'; }
+    switchView(view, el) {
         this.currentView = view;
         document.querySelectorAll('.bottom-nav-item').forEach(t => t.classList.remove('active'));
-        if (element) element.classList.add('active');
-        else { const tab = document.querySelector(`.bottom-nav-item[data-view="${view}"]`); if (tab) tab.classList.add('active'); }
+        if (el) el.classList.add('active');
         this.closeFabMenu();
         this.render();
     }
     closeModal() { document.getElementById('modalContainer').innerHTML = ''; }
 
-    // ==================== VOICE ====================
-    setupVoiceRecognition() {
+    setupVoice() {
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
             this.recognition = new SR();
@@ -544,91 +355,72 @@ class UltraTodoApp {
             this.recognition.onresult = (e) => {
                 let final = '';
                 for (let i = e.resultIndex; i < e.results.length; i++) { if (e.results[i].isFinal) final += e.results[i][0].transcript + ' '; }
-                if (final) this.processVoiceTasks(final);
+                if (final) this.processVoice(final);
             };
-            this.recognition.onend = () => { this.isListening = false; };
         }
     }
+
     openVoiceModal() {
         this.closeFabMenu();
         if (!this.recognition) { this.showToast('Non supporté'); return; }
         this.voiceTasks = [];
-        try { this.recognition.start(); this.isListening = true; } catch(e) {}
-        const modalHTML = `
-            <div class="modal-overlay active"><div class="modal-sheet">
-                <div class="modal-handle"></div>
+        try { this.recognition.start(); } catch(e) {}
+        document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay active"><div class="modal-sheet"><div class="modal-handle"></div>
                 <h3 class="modal-title">🎤 Ajout vocal</h3>
-                <p style="text-align:center;margin:15px 0;font-size:0.85rem;">Dites "Ajouter [tâche]". Dites "Stop" pour terminer.</p>
-                <div id="voiceTasksList" style="max-height:200px;overflow-y:auto;"></div>
-                <div style="display:flex;gap:10px;margin-top:15px;">
-                    <button class="btn btn-primary" onclick="app.stopVoiceAndSave()">Terminer</button>
-                    <button class="btn btn-danger" onclick="app.cancelVoice()">Annuler</button>
-                </div>
+                <p style="text-align:center;margin:15px 0;">Dites "Ajouter [tâche]". Dites "Stop" pour terminer.</p>
+                <div id="voiceList" style="max-height:200px;overflow-y:auto;"></div>
+                <div style="display:flex;gap:10px;margin-top:15px;"><button class="btn btn-primary" onclick="app.stopVoice()">Terminer</button><button class="btn btn-danger" onclick="app.cancelVoice()">Annuler</button></div>
             </div></div>`;
-        document.getElementById('modalContainer').innerHTML = modalHTML;
     }
-    processVoiceTasks(transcript) {
-        const text = transcript.toLowerCase();
-        if (text.includes('stop') || text.includes('terminer') || text.includes('fini')) { this.stopVoiceAndSave(); return; }
-        const keywords = ['ajouter', 'créer', 'nouvelle tâche', 'faire', 'acheter', 'appeler', 'envoyer', 'préparer'];
+
+    processVoice(text) {
+        const t = text.toLowerCase();
+        if (t.includes('stop') || t.includes('terminer') || t.includes('fini')) { this.stopVoice(); return; }
+        const keywords = ['ajouter', 'créer', 'faire', 'acheter', 'appeler', 'envoyer', 'préparer'];
         for (const kw of keywords) {
-            if (text.includes(kw)) {
-                let title = text.replace(kw, '').trim();
-                title = title.replace(/^(une|un|la|le|les|des)\s+/i, '').replace(/[.?!,;:]+$/g, '').trim();
+            if (t.includes(kw)) {
+                let title = t.replace(kw, '').trim().replace(/^(une|un|la|le|les|des)\s+/i, '').replace(/[.?!,;:]+$/g, '').trim();
                 if (title && title.length > 2) {
                     const task = { id: this.generateId(), title: title.charAt(0).toUpperCase() + title.slice(1), description: '', priority: 'medium', dueDate: this.currentView === 'today' ? new Date().toISOString().split('T')[0] : null, dueTime: null, tags: ['vocal'], status: 'todo', completed: false, createdAt: new Date().toISOString(), completedAt: null, subtasks: [], project: null, recurring: null, dependencies: [], archived: false };
                     this.voiceTasks.push(task);
                     this.data.tasks.unshift(task);
                     this.saveData();
-                    this.updateVoiceTaskList();
+                    const list = document.getElementById('voiceList');
+                    if (list) list.innerHTML = this.voiceTasks.map(t => `<div style="padding:5px 0;">✓ ${t.title}</div>`).join('');
                     break;
                 }
             }
         }
     }
-    updateVoiceTaskList() {
-        const list = document.getElementById('voiceTasksList');
-        if (list) list.innerHTML = this.voiceTasks.map(t => `<div style="padding:5px 0;font-size:0.85rem;">✓ ${t.title}</div>`).join('');
-    }
-    stopVoiceAndSave() {
-        try { this.recognition.stop(); } catch(e) {}
-        if (this.voiceTasks.length > 0) this.showToast(`✅ ${this.voiceTasks.length} tâche(s)`);
-        this.closeModal(); this.render();
-    }
-    cancelVoice() {
-        try { this.recognition.stop(); } catch(e) {}
-        this.voiceTasks.forEach(t => { this.data.tasks = this.data.tasks.filter(x => x.id !== t.id); });
-        this.voiceTasks = []; this.saveData(); this.closeModal(); this.render();
-    }
 
-    // ==================== ADD TASK ====================
+    stopVoice() { try { this.recognition.stop(); } catch(e) {} if (this.voiceTasks.length > 0) this.showToast('✅ ' + this.voiceTasks.length + ' tâche(s)'); this.closeModal(); this.render(); }
+    cancelVoice() { try { this.recognition.stop(); } catch(e) {} this.voiceTasks.forEach(t => { this.data.tasks = this.data.tasks.filter(x => x.id !== t.id); }); this.voiceTasks = []; this.saveData(); this.closeModal(); this.render(); }
+
     openAddTaskModal() {
         this.closeFabMenu();
         const today = new Date().toISOString().split('T')[0];
-        const modalHTML = `
-            <div class="modal-overlay active" onclick="if(event.target===this)app.closeModal()">
-                <div class="modal-sheet">
-                    <div class="modal-handle"></div>
-                    <h3 class="modal-title">Nouvelle tâche</h3>
-                    <div class="form-group"><label class="form-label">Titre *</label><input type="text" class="form-input" id="addTitle" placeholder="Que devez-vous faire ?"></div>
-                    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="addDescription" placeholder="Détails..."></textarea></div>
-                    <div class="form-row">
-                        <div class="form-group"><label class="form-label">Priorité</label><select class="form-select" id="addPriority"><option value="medium">🟡 Moyenne</option><option value="high">🔴 Haute</option><option value="low">🟢 Basse</option></select></div>
-                        <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="addDueDate" value="${today}"></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label class="form-label">Heure</label><input type="time" class="form-input" id="addDueTime"></div>
-                        <div class="form-group"><label class="form-label">Projet</label><select class="form-select" id="addProject"><option value="">Aucun</option>${this.data.projects.map(p => `<option value="${p}">${p}</option>`).join('')}<option value="__new__">+ Nouveau</option></select></div>
-                    </div>
-                    <div class="form-group"><label class="form-label">Tags (virgules)</label><input type="text" class="form-input" id="addTags" placeholder="ex: maison, urgent"></div>
-                    <div class="form-group"><label class="form-label">Sous-tâches (une par ligne)</label><textarea class="form-textarea" id="addSubtasks" placeholder="Sous-tâche 1"></textarea></div>
-                    <div class="form-group"><label class="form-label">Répétition</label><select class="form-select" id="addRecurring"><option value="">Aucune</option><option value="daily">Quotidien</option><option value="weekly">Hebdomadaire</option><option value="monthly">Mensuel</option></select></div>
-                    <div style="display:flex;gap:10px;"><button class="btn" onclick="app.closeModal()">Annuler</button><button class="btn btn-primary" onclick="app.saveNewTask()">Ajouter</button></div>
+        document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay active" onclick="if(event.target===this)app.closeModal()"><div class="modal-sheet"><div class="modal-handle"></div>
+                <h3 class="modal-title">Nouvelle tâche</h3>
+                <div class="form-group"><label class="form-label">Titre *</label><input type="text" class="form-input" id="addTitle" placeholder="Que devez-vous faire ?"></div>
+                <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="addDescription"></textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label class="form-label">Priorité</label><select class="form-select" id="addPriority"><option value="medium">🟡 Moyenne</option><option value="high">🔴 Haute</option><option value="low">🟢 Basse</option></select></div>
+                    <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="addDueDate" value="${today}"></div>
                 </div>
-            </div>`;
-        document.getElementById('modalContainer').innerHTML = modalHTML;
+                <div class="form-row">
+                    <div class="form-group"><label class="form-label">Heure</label><input type="time" class="form-input" id="addDueTime"></div>
+                    <div class="form-group"><label class="form-label">Projet</label><select class="form-select" id="addProject"><option value="">Aucun</option>${this.data.projects.map(p => `<option value="${p}">${p}</option>`).join('')}<option value="__new__">+ Nouveau</option></select></div>
+                </div>
+                <div class="form-group"><label class="form-label">Tags (virgules)</label><input type="text" class="form-input" id="addTags"></div>
+                <div class="form-group"><label class="form-label">Sous-tâches (une par ligne)</label><textarea class="form-textarea" id="addSubtasks"></textarea></div>
+                <div class="form-group"><label class="form-label">Répétition</label><select class="form-select" id="addRecurring"><option value="">Aucune</option><option value="daily">Quotidien</option><option value="weekly">Hebdomadaire</option><option value="monthly">Mensuel</option></select></div>
+                <div style="display:flex;gap:10px;"><button class="btn" onclick="app.closeModal()">Annuler</button><button class="btn btn-primary" onclick="app.saveNewTask()">Ajouter</button></div>
+            </div></div>`;
         setTimeout(() => document.getElementById('addTitle').focus(), 100);
     }
+
     saveNewTask() {
         const titleInput = document.getElementById('addTitle');
         if (!titleInput || !titleInput.value.trim()) { this.showToast('Titre obligatoire'); return; }
@@ -655,19 +447,16 @@ class UltraTodoApp {
         this.render();
     }
 
-    // ==================== RENDER ====================
     render() {
         const content = document.getElementById('mainContent');
-        switch(this.currentView) {
-            case 'today': this.renderToday(content); break;
-            case 'list': this.renderList(content); break;
-            case 'mindmap': this.renderMindMap(content); break;
-            case 'analytics': this.renderAnalytics(content); break;
-            case 'connections': this.renderConnections(content); break;
-            case 'projects': this.renderProjects(content); break;
-            case 'templates': this.renderTemplates(content); break;
-            default: this.renderToday(content);
-        }
+        if (this.currentView === 'today') this.renderToday(content);
+        else if (this.currentView === 'list') this.renderList(content);
+        else if (this.currentView === 'analytics') this.renderAnalytics(content);
+        else if (this.currentView === 'connections') this.renderConnections(content);
+        else if (this.currentView === 'projects') this.renderProjects(content);
+        else if (this.currentView === 'templates') this.renderTemplates(content);
+        else if (this.currentView === 'mindmap') this.renderMindMap(content);
+        else this.renderToday(content);
     }
 
     renderToday(container) {
@@ -676,34 +465,28 @@ class UltraTodoApp {
         const todayTasks = this.data.tasks.filter(t => t.dueDate === today && !t.completed && !t.archived);
         const completed = this.data.tasks.filter(t => t.completed && t.completedAt && t.completedAt.split('T')[0] === today);
         const dateStr = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-        let html = `<div class="today-date">${dateStr}</div>
-            ${this.connectedPeers.length > 0 ? `<div class="connection-banner">🔗 ${this.connectedPeers.length} contact(s) <button class="btn btn-sm" style="width:auto;padding:5px 10px;" onclick="app.openConnectionModal()">Gérer</button></div>` : ''}
-            <div class="search-bar"><span class="search-icon">🔍</span><input type="text" placeholder="Rechercher..." oninput="app.search(this.value)"></div>`;
-        if (overdue.length > 0) { html += `<div class="section-header">🔴 En retard (${overdue.length})</div>`; overdue.forEach(t => html += this.taskCardHTML(t)); }
-        if (todayTasks.length > 0) { html += `<div class="section-header">📅 Aujourd'hui (${todayTasks.length})</div>`; todayTasks.forEach(t => html += this.taskCardHTML(t)); }
-        if (completed.length > 0) { html += `<div class="section-header">✅ Terminées (${completed.length})</div>`; completed.forEach(t => html += this.taskCardHTML(t)); }
-        if (overdue.length === 0 && todayTasks.length === 0 && completed.length === 0) {
-            html += `<div style="text-align:center;padding:40px;color:var(--text-muted);"><div style="font-size:3rem;margin-bottom:10px;">🎉</div><p>Rien à faire !</p><p style="font-size:0.8rem;">Appuyez sur + pour ajouter</p></div>`;
-        }
+        let html = `<div class="today-date">${dateStr}</div><div class="search-bar"><span class="search-icon">🔍</span><input type="text" placeholder="Rechercher..." oninput="app.search(this.value)"></div>`;
+        if (overdue.length > 0) { html += `<div class="section-header">🔴 En retard (${overdue.length})</div>`; overdue.forEach(t => html += this.taskCard(t)); }
+        if (todayTasks.length > 0) { html += `<div class="section-header">📅 Aujourd'hui (${todayTasks.length})</div>`; todayTasks.forEach(t => html += this.taskCard(t)); }
+        if (completed.length > 0) { html += `<div class="section-header">✅ Terminées (${completed.length})</div>`; completed.forEach(t => html += this.taskCard(t)); }
+        if (overdue.length === 0 && todayTasks.length === 0 && completed.length === 0) html += `<div style="text-align:center;padding:40px;color:var(--text-muted);"><div style="font-size:3rem;">🎉</div><p>Rien à faire !</p></div>`;
         container.innerHTML = html;
     }
 
     renderList(container) {
-        const tasks = this.sortTasks(this.data.tasks.filter(t => !t.archived));
+        const tasks = this.data.tasks.filter(t => !t.archived).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         let html = `<div class="search-bar"><span class="search-icon">🔍</span><input type="text" placeholder="Rechercher..." oninput="app.search(this.value)"></div>`;
         if (tasks.length === 0) html += `<div style="text-align:center;padding:40px;color:var(--text-muted);">📭 Aucune tâche</div>`;
-        else tasks.forEach(t => html += this.taskCardHTML(t));
+        else tasks.forEach(t => html += this.taskCard(t));
         container.innerHTML = html;
     }
 
-    taskCardHTML(task) {
+    taskCard(task) {
         if (task.archived) return '';
         const isOverdue = this.isOverdue(task);
-        const isBlocked = task.dependencies && task.dependencies.some(d => { const dep = this.data.tasks.find(x => x.id === d); return dep && !dep.completed; });
         const pLabel = { high: 'Haute', medium: 'Moyenne', low: 'Basse' }[task.priority] || task.priority;
-        const subHTML = task.subtasks && task.subtasks.length > 0 ? `<div class="task-subtasks">${task.subtasks.map(s => `<div class="subtask-item ${s.completed ? 'completed' : ''}"><input type="checkbox" ${s.completed ? 'checked' : ''} onclick="event.stopPropagation();app.toggleSubtask('${task.id}','${s.id}')"><span>${s.title}</span></div>`).join('')}</div>` : '';
         return `
-            <div class="task-card ${isOverdue ? 'overdue' : ''} ${task.completed ? 'completed' : ''} ${isBlocked ? 'blocked' : ''}" onclick="app.openTaskDetail('${task.id}')">
+            <div class="task-card ${isOverdue ? 'overdue' : ''} ${task.completed ? 'completed' : ''}" onclick="app.openTaskDetail('${task.id}')">
                 <div class="task-header">
                     <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="event.stopPropagation();app.toggleTask('${task.id}')">${task.completed ? '✓' : ''}</div>
                     <div class="task-title ${task.completed ? 'completed' : ''}">${task.title}</div>
@@ -711,11 +494,9 @@ class UltraTodoApp {
                 </div>
                 ${task.project ? `<div style="margin-top:4px;"><span class="task-project">📁 ${task.project}</span></div>` : ''}
                 ${task.tags && task.tags.length > 0 ? `<div class="task-tags">${task.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
-                ${subHTML}
                 <div class="task-meta">
                     ${task.dueDate ? `<span>📅 ${this.formatDate(task.dueDate)}${task.dueTime ? ' ' + task.dueTime : ''}</span>` : ''}
                     ${isOverdue ? '<span style="color:var(--danger);">(retard)</span>' : ''}
-                    ${isBlocked ? '<span style="color:var(--warning);">🔒 Bloquée</span>' : ''}
                     ${task.recurring ? '<span>🔄</span>' : ''}
                 </div>
             </div>`;
@@ -724,45 +505,37 @@ class UltraTodoApp {
     openTaskDetail(taskId) {
         const task = this.data.tasks.find(t => t.id === taskId);
         if (!task) return;
-        const modalHTML = `
-            <div class="modal-overlay active" onclick="if(event.target===this)app.closeModal()">
-                <div class="modal-sheet">
-                    <div class="modal-handle"></div>
-                    <h3 class="modal-title">${task.completed ? '✅ ' : ''}${task.title}</h3>
-                    ${task.description ? `<p style="color:var(--text-secondary);margin-bottom:10px;">${task.description}</p>` : ''}
-                    ${task.subtasks.length > 0 ? `<div class="section-header">Sous-tâches (${task.subtasks.filter(s => s.completed).length}/${task.subtasks.length})</div>${task.subtasks.map(s => `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:0.85rem;"><input type="checkbox" ${s.completed ? 'checked' : ''} onchange="app.toggleSubtask('${task.id}','${s.id}')"><span style="${s.completed ? 'text-decoration:line-through;' : ''}">${s.title}</span></div>`).join('')}` : ''}
-                    <div style="display:flex;gap:10px;margin-top:20px;"><button class="btn" onclick="app.openEditModal('${task.id}')">✏️ Modifier</button><button class="btn btn-danger" onclick="app.deleteTask('${task.id}')">🗑️ Supprimer</button></div>
-                </div>
-            </div>`;
-        document.getElementById('modalContainer').innerHTML = modalHTML;
+        document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay active" onclick="if(event.target===this)app.closeModal()"><div class="modal-sheet"><div class="modal-handle"></div>
+                <h3 class="modal-title">${task.completed ? '✅ ' : ''}${task.title}</h3>
+                ${task.description ? `<p style="color:var(--text-secondary);margin-bottom:10px;">${task.description}</p>` : ''}
+                ${task.subtasks.length > 0 ? `<div class="section-header">Sous-tâches (${task.subtasks.filter(s => s.completed).length}/${task.subtasks.length})</div>` + task.subtasks.map(s => `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;"><input type="checkbox" ${s.completed ? 'checked' : ''} onchange="app.toggleSubtask('${task.id}','${s.id}')"><span style="${s.completed ? 'text-decoration:line-through;' : ''}">${s.title}</span></div>`).join('') : ''}
+                <div style="display:flex;gap:10px;margin-top:20px;"><button class="btn" onclick="app.openEditModal('${task.id}')">✏️ Modifier</button><button class="btn btn-danger" onclick="app.deleteTask('${task.id}')">🗑️ Supprimer</button></div>
+            </div></div>`;
     }
 
     openEditModal(taskId) {
         const task = this.data.tasks.find(t => t.id === taskId);
         if (!task) return;
-        const modalHTML = `
-            <div class="modal-overlay active" onclick="if(event.target===this)app.closeModal()">
-                <div class="modal-sheet">
-                    <div class="modal-handle"></div>
-                    <h3 class="modal-title">Modifier</h3>
-                    <div class="form-group"><label class="form-label">Titre</label><input type="text" class="form-input" id="editTitle" value="${task.title}"></div>
-                    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="editDescription">${task.description || ''}</textarea></div>
-                    <div class="form-row">
-                        <div class="form-group"><label class="form-label">Priorité</label><select class="form-select" id="editPriority"><option value="high" ${task.priority==='high'?'selected':''}>Haute</option><option value="medium" ${task.priority==='medium'?'selected':''}>Moyenne</option><option value="low" ${task.priority==='low'?'selected':''}>Basse</option></select></div>
-                        <div class="form-group"><label class="form-label">Statut</label><select class="form-select" id="editStatus"><option value="todo" ${task.status==='todo'?'selected':''}>À faire</option><option value="done" ${task.status==='done'?'selected':''}>Terminé</option></select></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="editDueDate" value="${task.dueDate || ''}"></div>
-                        <div class="form-group"><label class="form-label">Heure</label><input type="time" class="form-input" id="editDueTime" value="${task.dueTime || ''}"></div>
-                    </div>
-                    <div class="form-group"><label class="form-label">Projet</label><select class="form-select" id="editProject"><option value="">Aucun</option>${this.data.projects.map(p => `<option value="${p}" ${task.project===p?'selected':''}>${p}</option>`).join('')}</select></div>
-                    <div class="form-group"><label class="form-label">Tags</label><input type="text" class="form-input" id="editTags" value="${task.tags.join(', ')}"></div>
-                    <div class="form-group"><label class="form-label">Répétition</label><select class="form-select" id="editRecurring"><option value="">Aucune</option><option value="daily" ${task.recurring==='daily'?'selected':''}>Quotidien</option><option value="weekly" ${task.recurring==='weekly'?'selected':''}>Hebdomadaire</option><option value="monthly" ${task.recurring==='monthly'?'selected':''}>Mensuel</option></select></div>
-                    <div class="form-group"><label class="form-label">Dépendances (IDs)</label><input type="text" class="form-input" id="editDependencies" value="${(task.dependencies || []).join(', ')}"></div>
-                    <div style="display:flex;gap:10px;"><button class="btn" onclick="app.closeModal()">Annuler</button><button class="btn btn-primary" onclick="app.saveEdit('${task.id}')">Enregistrer</button></div>
+        document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay active" onclick="if(event.target===this)app.closeModal()"><div class="modal-sheet"><div class="modal-handle"></div>
+                <h3 class="modal-title">Modifier</h3>
+                <div class="form-group"><label class="form-label">Titre</label><input type="text" class="form-input" id="editTitle" value="${task.title}"></div>
+                <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="editDescription">${task.description || ''}</textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label class="form-label">Priorité</label><select class="form-select" id="editPriority"><option value="high" ${task.priority==='high'?'selected':''}>Haute</option><option value="medium" ${task.priority==='medium'?'selected':''}>Moyenne</option><option value="low" ${task.priority==='low'?'selected':''}>Basse</option></select></div>
+                    <div class="form-group"><label class="form-label">Statut</label><select class="form-select" id="editStatus"><option value="todo" ${task.status==='todo'?'selected':''}>À faire</option><option value="done" ${task.status==='done'?'selected':''}>Terminé</option></select></div>
                 </div>
-            </div>`;
-        document.getElementById('modalContainer').innerHTML = modalHTML;
+                <div class="form-row">
+                    <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="editDueDate" value="${task.dueDate || ''}"></div>
+                    <div class="form-group"><label class="form-label">Heure</label><input type="time" class="form-input" id="editDueTime" value="${task.dueTime || ''}"></div>
+                </div>
+                <div class="form-group"><label class="form-label">Projet</label><select class="form-select" id="editProject"><option value="">Aucun</option>${this.data.projects.map(p => `<option value="${p}" ${task.project===p?'selected':''}>${p}</option>`).join('')}</select></div>
+                <div class="form-group"><label class="form-label">Tags</label><input type="text" class="form-input" id="editTags" value="${task.tags.join(', ')}"></div>
+                <div class="form-group"><label class="form-label">Répétition</label><select class="form-select" id="editRecurring"><option value="">Aucune</option><option value="daily" ${task.recurring==='daily'?'selected':''}>Quotidien</option><option value="weekly" ${task.recurring==='weekly'?'selected':''}>Hebdomadaire</option><option value="monthly" ${task.recurring==='monthly'?'selected':''}>Mensuel</option></select></div>
+                <div class="form-group"><label class="form-label">Dépendances (IDs)</label><input type="text" class="form-input" id="editDependencies" value="${(task.dependencies || []).join(', ')}"></div>
+                <div style="display:flex;gap:10px;"><button class="btn" onclick="app.closeModal()">Annuler</button><button class="btn btn-primary" onclick="app.saveEdit('${task.id}')">Enregistrer</button></div>
+            </div></div>`;
     }
 
     saveEdit(taskId) {
@@ -805,20 +578,7 @@ class UltraTodoApp {
         if (task) { const sub = task.subtasks.find(s => s.id === subtaskId); if (sub) { sub.completed = !sub.completed; this.saveData(); this.render(); } }
     }
     deleteTask(taskId) {
-        if (confirm('Supprimer cette tâche ?')) {
-            this.data.tasks = this.data.tasks.filter(t => t.id !== taskId);
-            this.saveData(); this.closeModal(); this.showToast('🗑️ Supprimée'); this.render();
-        }
-    }
-    sortTasks(tasks) {
-        return tasks.sort((a, b) => {
-            const p = { high: 0, medium: 1, low: 2 };
-            if (a.priority !== b.priority) return p[a.priority] - p[b.priority];
-            if (a.dueDate && b.dueDate) return new Date(a.dueDate) - new Date(b.dueDate);
-            if (a.dueDate) return -1;
-            if (b.dueDate) return 1;
-            return new Date(b.createdAt) - new Date(a.createdAt);
-        });
+        if (confirm('Supprimer ?')) { this.data.tasks = this.data.tasks.filter(t => t.id !== taskId); this.saveData(); this.closeModal(); this.showToast('🗑️ Supprimée'); this.render(); }
     }
     isOverdue(task) {
         if (!task.dueDate || task.completed || task.archived) return false;
@@ -827,278 +587,78 @@ class UltraTodoApp {
         else due.setHours(23, 59, 59, 999);
         return due < new Date();
     }
-    search(q) {
-        const query = q.toLowerCase();
-        document.querySelectorAll('.task-card').forEach(card => {
-            const t = card.querySelector('.task-title');
-            if (t) card.style.display = t.textContent.toLowerCase().includes(query) ? '' : 'none';
-        });
-    }
+    search(q) { const query = q.toLowerCase(); document.querySelectorAll('.task-card').forEach(card => { const t = card.querySelector('.task-title'); if (t) card.style.display = t.textContent.toLowerCase().includes(query) ? '' : 'none'; }); }
+    formatDate(dateStr) { return dateStr ? new Date(dateStr).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : ''; }
 
     // ==================== CONNECTIONS ====================
     openConnectionModal() {
-        const modalHTML = `
-            <div class="modal-overlay active" onclick="if(event.target===this)app.closeModal()">
-                <div class="modal-sheet">
-                    <div class="modal-handle"></div>
-                    <h3 class="modal-title">🔗 Connexion</h3>
-                    <div class="form-group">
-                        <label class="form-label">Votre code (à partager)</label>
-                        <div class="code-display">${this.myCode}</div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Code du contact (à entrer)</label>
-                        <div style="display:flex;gap:8px;">
-                            <input type="text" class="form-input" id="peerCodeInput" placeholder="______" maxlength="6" inputmode="numeric" style="text-align:center;font-size:1.5rem;letter-spacing:8px;flex:1;">
-                            <button class="btn btn-primary" style="width:auto;" onclick="app.connectToPeer()">Connecter</button>
-                        </div>
-                    </div>
-                    <div class="menu-divider"></div>
-                    <div class="form-group">
-                        <label class="form-label">Contacts (${this.connectedPeers.length})</label>
-                        ${this.connectedPeers.length === 0 ? '<p style="font-size:0.8rem;color:var(--text-muted);">Aucun contact</p>' : 
-                        this.connectedPeers.map(p => `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);"><span>👤 ${p.name || 'Contact ' + p.code}</span><button class="btn btn-sm btn-danger" style="width:auto;padding:4px 8px;" onclick="app.disconnectPeer('${p.code}')">✕</button></div>`).join('')}
-                    </div>
+        document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay active" onclick="if(event.target===this)app.closeModal()"><div class="modal-sheet"><div class="modal-handle"></div>
+                <h3 class="modal-title">🔗 Connexion</h3>
+                <div class="form-group"><label class="form-label">Votre code (à partager)</label><div class="code-display">${this.myCode}</div></div>
+                <div class="form-group"><label class="form-label">Code du contact (à entrer)</label>
+                    <div style="display:flex;gap:8px;"><input type="text" class="form-input" id="peerCodeInput" placeholder="______" maxlength="6" inputmode="numeric" style="text-align:center;font-size:1.5rem;letter-spacing:8px;flex:1;"><button class="btn btn-primary" style="width:auto;" onclick="app.connectToPeer()">Connecter</button></div>
                 </div>
-            </div>`;
-        document.getElementById('modalContainer').innerHTML = modalHTML;
+                <div class="menu-divider"></div>
+                <div class="form-group"><label class="form-label">Contacts (${this.connectedPeers.length})</label>
+                    ${this.connectedPeers.length === 0 ? '<p style="font-size:0.8rem;color:var(--text-muted);">Aucun contact</p>' : this.connectedPeers.map(p => `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span>👤 ${p.name || 'Contact ' + p.code}</span><button class="btn btn-sm btn-danger" style="width:auto;padding:4px 8px;" onclick="app.disconnectPeer('${p.code}')">✕</button></div>`).join('')}
+                </div>
+            </div></div>`;
     }
     connectToPeer() {
         const code = document.getElementById('peerCodeInput').value.trim();
-        if (code.length !== 6 || !/^\d{6}$/.test(code)) { this.showToast('Code invalide (6 chiffres)'); return; }
-        if (code === this.myCode) { this.showToast('Code identique au vôtre'); return; }
+        if (code.length !== 6 || !/^\d{6}$/.test(code)) { this.showToast('Code invalide'); return; }
+        if (code === this.myCode) { this.showToast('Code identique'); return; }
         if (this.connectedPeers.some(p => p.code === code)) { this.showToast('Déjà connecté'); return; }
         const name = prompt('Nom du contact :', 'Contact ' + code);
-        this.connectedPeers.push({ code, name: name || 'Contact ' + code, connectedAt: new Date().toISOString() });
-        if (!this.peersData) this.peersData = {};
-        if (!this.peersData[code]) {
-            this.peersData[code] = {
-                tasks: [
-                    { id: 'p_' + code + '_1', title: 'Tâche partagée 1', priority: 'high', dueDate: new Date().toISOString().split('T')[0], completed: false, project: 'Partagé' },
-                    { id: 'p_' + code + '_2', title: 'Tâche partagée 2', priority: 'medium', completed: true, project: 'Partagé' }
-                ],
-                lastSync: new Date().toISOString()
-            };
-        }
-        this.saveData();
-        this.showToast('✅ Connecté à ' + (name || 'Contact'));
+        this.connectedPeers.push({ code, name: name || 'Contact ' + code });
+        if (!this.peersData[code]) this.peersData[code] = { tasks: [{ id: 'p1', title: 'Tâche partagée 1', priority: 'high', completed: false }, { id: 'p2', title: 'Tâche partagée 2', priority: 'medium', completed: true }], lastSync: new Date().toISOString() };
+        localStorage.setItem('connectedPeers', JSON.stringify(this.connectedPeers));
+        localStorage.setItem('peersData', JSON.stringify(this.peersData));
+        this.showToast('✅ Connecté');
         this.closeModal(); this.render();
     }
     disconnectPeer(code) {
         this.connectedPeers = this.connectedPeers.filter(p => p.code !== code);
-        if (this.peersData && this.peersData[code]) { delete this.peersData[code]; }
-        this.saveData();
+        delete this.peersData[code];
+        localStorage.setItem('connectedPeers', JSON.stringify(this.connectedPeers));
+        localStorage.setItem('peersData', JSON.stringify(this.peersData));
         this.showToast('🔌 Déconnecté'); this.closeModal(); this.render();
     }
     renderConnections(container) {
-        let html = `<h3 style="margin-bottom:15px;">🔗 Connexions</h3>
-            <div style="background:var(--card);border-radius:var(--radius);padding:15px;margin-bottom:15px;box-shadow:var(--shadow-sm);">
-                <div class="form-label">Votre code</div><div class="code-display">${this.myCode}</div>
-                <button class="btn btn-primary" onclick="app.openConnectionModal()">Gérer les connexions</button>
-            </div>`;
-        if (this.connectedPeers.length === 0) {
-            html += `<div style="text-align:center;padding:40px;color:var(--text-muted);"><div style="font-size:3rem;">🔗</div><p>Aucune connexion</p><p style="font-size:0.8rem;">Connectez-vous avec quelqu'un</p></div>`;
-        } else {
-            this.connectedPeers.forEach(peer => {
-                const pd = this.peersData ? this.peersData[peer.code] : null;
-                const tasks = pd ? pd.tasks : [];
-                const done = tasks.filter(t => t.completed).length;
-                html += `<div style="background:var(--card);border-radius:var(--radius);padding:15px;margin-bottom:10px;box-shadow:var(--shadow-sm);">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><strong>👤 ${peer.name}</strong><span class="peer-badge">${done}/${tasks.length}</span></div>
-                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                        <button class="btn btn-sm" style="width:auto;padding:6px 10px;" onclick="app.showPeerTasks('${peer.code}')">📋 Tâches</button>
-                        <button class="btn btn-sm" style="width:auto;padding:6px 10px;" onclick="app.showPeerAnalytics('${peer.code}')">📈 Stats</button>
-                        <button class="btn btn-sm btn-danger" style="width:auto;padding:6px 10px;" onclick="app.disconnectPeer('${peer.code}')">🔌</button>
-                    </div>
-                </div>`;
-            });
-        }
+        let html = `<h3 style="margin-bottom:15px;">🔗 Connexions</h3><div style="background:var(--card);border-radius:var(--radius);padding:15px;margin-bottom:15px;"><div class="form-label">Votre code</div><div class="code-display">${this.myCode}</div><button class="btn btn-primary" onclick="app.openConnectionModal()">Gérer</button></div>`;
+        if (this.connectedPeers.length === 0) html += `<div style="text-align:center;padding:40px;color:var(--text-muted);">🔗 Aucune connexion</div>`;
+        else this.connectedPeers.forEach(peer => {
+            const pd = this.peersData[peer.code] || { tasks: [] };
+            const done = pd.tasks.filter(t => t.completed).length;
+            html += `<div style="background:var(--card);border-radius:var(--radius);padding:15px;margin-bottom:10px;"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><strong>👤 ${peer.name}</strong><span>${done}/${pd.tasks.length}</span></div>
+                <div style="display:flex;gap:6px;"><button class="btn btn-sm" style="width:auto;" onclick="app.showPeerTasks('${peer.code}')">📋 Tâches</button><button class="btn btn-sm btn-danger" style="width:auto;" onclick="app.disconnectPeer('${peer.code}')">🔌</button></div></div>`;
+        });
         container.innerHTML = html;
     }
     showPeerTasks(code) {
         const peer = this.connectedPeers.find(p => p.code === code);
-        const pd = this.peersData ? this.peersData[code] : null;
-        if (!peer || !pd) return;
-        const modalHTML = `<div class="modal-overlay active"><div class="modal-sheet"><div class="modal-handle"></div><h3 class="modal-title">📋 Tâches de ${peer.name}</h3>${pd.tasks.map(t => `<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;"><span>${t.completed ? '✅' : '○'}</span><span style="flex:1;">${t.title}</span><span class="task-priority priority-${t.priority}">${t.priority}</span></div>`).join('')}</div></div>`;
-        document.getElementById('modalContainer').innerHTML = modalHTML;
-    }
-    showPeerAnalytics(code) {
-        const peer = this.connectedPeers.find(p => p.code === code);
-        const pd = this.peersData ? this.peersData[code] : null;
-        if (!peer || !pd) return;
-        const total = pd.tasks.length, done = pd.tasks.filter(t => t.completed).length;
-        const rate = total > 0 ? Math.round((done / total) * 100) : 0;
-        const modalHTML = `<div class="modal-overlay active"><div class="modal-sheet"><div class="modal-handle"></div><h3 class="modal-title">📈 Stats de ${peer.name}</h3><div class="analytics-stats"><div class="stat-box"><div class="stat-value">${rate}%</div><div class="stat-label">Complétion</div></div><div class="stat-box"><div class="stat-value">${total}</div><div class="stat-label">Total</div></div></div></div></div>`;
-        document.getElementById('modalContainer').innerHTML = modalHTML;
-    }
-
-    // ==================== MIND MAP ====================
-    renderMindMap(container) {
-        const tasks = this.data.tasks.filter(t => !t.archived);
-        const projects = this.data.projects;
-        container.innerHTML = `
-            <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;"><button class="btn btn-sm" style="width:auto;padding:8px 12px;" onclick="app.autoLayoutMindMap()">🔄 Organiser</button><button class="btn btn-sm" style="width:auto;padding:8px 12px;" onclick="app.clearMindMapConnections()">🧹 Effacer liens</button></div>
-            <div class="mindmap-container" id="mindmapContainer">
-                <canvas id="mindmapCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;"></canvas>
-                <div id="mindmapNodes" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></div>
-                <div class="mindmap-zoom-controls"><button class="zoom-btn" onclick="app.zoomMindMap(1.2)">+</button><button class="zoom-btn" onclick="app.zoomMindMap(0.8)">−</button><button class="zoom-btn" onclick="app.resetMindMapZoom()">⟳</button></div>
-            </div>`;
-        this.setupMindMap();
-    }
-    setupMindMap() {
-        const container = document.getElementById('mindmapContainer');
-        if (!container) return;
-        const canvas = document.getElementById('mindmapCanvas');
-        const nodesLayer = document.getElementById('mindmapNodes');
-        canvas.width = container.clientWidth;
-        canvas.height = container.clientHeight;
-        const tasks = this.data.tasks.filter(t => !t.archived);
-        const projects = this.data.projects;
-        let nodeHTML = '';
-        const positions = {};
-        tasks.forEach((task, i) => {
-            const cols = Math.max(1, Math.ceil(Math.sqrt(tasks.length)));
-            const x = (i % cols) * 170 + 50, y = Math.floor(i / cols) * 90 + 50;
-            positions[task.id] = { x, y, type: 'task' };
-            nodeHTML += `<div class="mindmap-node" data-id="${task.id}" style="left:${x}px;top:${y}px;pointer-events:auto;" onclick="app.onMindMapNodeClick('${task.id}', event)">${task.completed ? '✅' : '○'} ${task.title.substring(0, 25)}</div>`;
-        });
-        projects.forEach((p, i) => {
-            const x = tasks.length * 170 + 100 + i * 150, y = 50 + i * 80;
-            positions[p] = { x, y, type: 'project' };
-            nodeHTML += `<div class="mindmap-node project-node" data-id="${p}" style="left:${x}px;top:${y}px;pointer-events:auto;" onclick="app.onProjectNodeClick('${p}', event)">📁 ${p}</div>`;
-        });
-        nodesLayer.innerHTML = nodeHTML;
-        this.mindMapNodePositions = positions;
-        this.drawMindMapConnections();
-        this.setupMindMapGestures();
-    }
-    drawMindMapConnections() {
-        const canvas = document.getElementById('mindmapCanvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = canvas.clientWidth * dpr;
-        canvas.height = canvas.clientHeight * dpr;
-        ctx.scale(dpr, dpr);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        this.data.tasks.forEach(task => {
-            if (task.dependencies) {
-                task.dependencies.forEach(depId => {
-                    const from = this.mindMapNodePositions[depId], to = this.mindMapNodePositions[task.id];
-                    if (from && to) {
-                        ctx.beginPath();
-                        ctx.moveTo(from.x * this.mindMapZoom + this.mindMapPanX + 60, from.y * this.mindMapZoom + this.mindMapPanY + 15);
-                        ctx.lineTo(to.x * this.mindMapZoom + this.mindMapPanX + 60, to.y * this.mindMapZoom + this.mindMapPanY + 15);
-                        ctx.strokeStyle = '#6c5ce7'; ctx.lineWidth = 2; ctx.stroke();
-                    }
-                });
-            }
-            if (task.project) {
-                const from = this.mindMapNodePositions[task.project], to = this.mindMapNodePositions[task.id];
-                if (from && to) {
-                    ctx.beginPath();
-                    ctx.moveTo(from.x * this.mindMapZoom + this.mindMapPanX + 60, from.y * this.mindMapZoom + this.mindMapPanY + 15);
-                    ctx.lineTo(to.x * this.mindMapZoom + this.mindMapPanX + 60, to.y * this.mindMapZoom + this.mindMapPanY + 15);
-                    ctx.strokeStyle = '#0984e3'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 5]); ctx.stroke(); ctx.setLineDash([]);
-                }
-            }
-        });
-    }
-    setupMindMapGestures() {
-        const container = document.getElementById('mindmapContainer');
-        if (!container) return;
-        let isPanning = false, startX = 0, startY = 0, pinchStartDist = 0, pinchStartZoom = 1;
-        container.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 1) { isPanning = true; startX = e.touches[0].clientX - this.mindMapPanX; startY = e.touches[0].clientY - this.mindMapPanY; }
-            else if (e.touches.length === 2) { isPanning = false; pinchStartDist = this.getDistance(e.touches[0], e.touches[1]); pinchStartZoom = this.mindMapZoom; }
-        });
-        container.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            if (e.touches.length === 1 && isPanning) { this.mindMapPanX = e.touches[0].clientX - startX; this.mindMapPanY = e.touches[0].clientY - startY; this.updateMindMapPositions(); }
-            else if (e.touches.length === 2) { const dist = this.getDistance(e.touches[0], e.touches[1]); this.mindMapZoom = Math.max(0.3, Math.min(3, pinchStartZoom * (dist / pinchStartDist))); this.updateMindMapPositions(); }
-        }, { passive: false });
-        container.addEventListener('touchend', () => { isPanning = false; });
-        container.addEventListener('wheel', (e) => { e.preventDefault(); this.mindMapZoom = Math.max(0.3, Math.min(3, this.mindMapZoom * (e.deltaY > 0 ? 0.9 : 1.1))); this.updateMindMapPositions(); }, { passive: false });
-    }
-    getDistance(t1, t2) { return Math.sqrt(Math.pow(t2.clientX - t1.clientX, 2) + Math.pow(t2.clientY - t1.clientY, 2)); }
-    updateMindMapPositions() {
-        document.querySelectorAll('.mindmap-node').forEach(node => {
-            const id = node.dataset.id, pos = this.mindMapNodePositions[id];
-            if (pos) { node.style.left = (pos.x * this.mindMapZoom + this.mindMapPanX) + 'px'; node.style.top = (pos.y * this.mindMapZoom + this.mindMapPanY) + 'px'; node.style.transform = `scale(${this.mindMapZoom})`; }
-        });
-        this.drawMindMapConnections();
-    }
-    zoomMindMap(f) { this.mindMapZoom = Math.max(0.3, Math.min(3, this.mindMapZoom * f)); this.updateMindMapPositions(); }
-    resetMindMapZoom() { this.mindMapZoom = 1; this.mindMapPanX = 0; this.mindMapPanY = 0; this.updateMindMapPositions(); }
-    onMindMapNodeClick(taskId, event) {
-        event.stopPropagation();
-        if (this.mindMapConnectingFrom === null) {
-            this.mindMapConnectingFrom = taskId;
-            document.querySelector(`[data-id="${taskId}"]`)?.classList.add('selected');
-            this.showToast('Cliquez sur une autre tâche');
-        } else if (this.mindMapConnectingFrom === taskId) {
-            this.mindMapConnectingFrom = null;
-            document.querySelectorAll('.mindmap-node').forEach(n => n.classList.remove('selected'));
-        } else {
-            const fromTask = this.data.tasks.find(t => t.id === this.mindMapConnectingFrom);
-            const toTask = this.data.tasks.find(t => t.id === taskId);
-            if (fromTask && toTask) {
-                if (!toTask.dependencies) toTask.dependencies = [];
-                if (!toTask.dependencies.includes(fromTask.id)) { toTask.dependencies.push(fromTask.id); this.saveData(); this.showToast('🔗 Lié'); this.drawMindMapConnections(); }
-            }
-            this.mindMapConnectingFrom = null;
-            document.querySelectorAll('.mindmap-node').forEach(n => n.classList.remove('selected'));
-        }
-    }
-    onProjectNodeClick(project, event) {
-        event.stopPropagation();
-        if (this.mindMapConnectingFrom === null) {
-            this.mindMapConnectingFrom = project;
-            document.querySelector(`[data-id="${project}"]`)?.classList.add('selected');
-            this.showToast('Cliquez sur une tâche');
-        } else {
-            const fromTask = this.data.tasks.find(t => t.id === this.mindMapConnectingFrom);
-            if (fromTask) { fromTask.project = project; this.saveData(); this.showToast(`📁 Assigné à ${project}`); this.drawMindMapConnections(); }
-            this.mindMapConnectingFrom = null;
-            document.querySelectorAll('.mindmap-node').forEach(n => n.classList.remove('selected'));
-        }
-    }
-    autoLayoutMindMap() { this.mindMapZoom = 1; this.mindMapPanX = 0; this.mindMapPanY = 0; this.setupMindMap(); }
-    clearMindMapConnections() {
-        if (confirm('Effacer toutes les connexions ?')) {
-            this.data.tasks.forEach(t => { t.dependencies = []; });
-            this.saveData(); this.drawMindMapConnections(); this.showToast('🧹 Effacé');
-        }
+        const pd = this.peersData[code] || { tasks: [] };
+        document.getElementById('modalContainer').innerHTML = `<div class="modal-overlay active"><div class="modal-sheet"><div class="modal-handle"></div><h3 class="modal-title">📋 Tâches de ${peer.name}</h3>${pd.tasks.map(t => `<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;"><span>${t.completed ? '✅' : '○'}</span><span style="flex:1;">${t.title}</span></div>`).join('')}</div></div>`;
     }
 
     // ==================== ANALYTICS ====================
     renderAnalytics(container) {
-        const total = this.data.tasks.filter(t => !t.archived).length;
-        const completed = this.data.tasks.filter(t => t.completed && !t.archived).length;
+        const total = this.data.tasks.length;
+        const completed = this.data.tasks.filter(t => t.completed).length;
         const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
         const overdue = this.data.tasks.filter(t => this.isOverdue(t)).length;
-        const streak = this.calculateStreak();
-        container.innerHTML = `
-            <h3 style="margin-bottom:15px;">📈 Statistiques</h3>
+        let streak = 0; const today = new Date();
+        for (let i = 0; i < 365; i++) { const d = new Date(today); d.setDate(d.getDate() - i); const ds = d.toISOString().split('T')[0]; if (this.data.tasks.some(t => t.completedAt && t.completedAt.split('T')[0] === ds)) streak++; else if (i > 0) break; }
+        container.innerHTML = `<h3 style="margin-bottom:15px;">📈 Stats</h3>
             <div class="analytics-stats">
                 <div class="stat-box"><div class="stat-value">${rate}%</div><div class="stat-label">Complétion (${completed}/${total})</div></div>
                 <div class="stat-box"><div class="stat-value">${overdue}</div><div class="stat-label">En retard</div></div>
                 <div class="stat-box"><div class="stat-value">${streak}🔥</div><div class="stat-label">Série</div></div>
                 <div class="stat-box"><div class="stat-value">${total - completed}</div><div class="stat-label">Actives</div></div>
             </div>
-            <div style="background:var(--card);border-radius:12px;padding:15px;box-shadow:var(--shadow-sm);"><h4 style="margin-bottom:10px;">📊 7 jours</h4><canvas id="weeklyChart" width="300" height="150"></canvas></div>`;
+            <div style="background:var(--card);border-radius:12px;padding:15px;"><h4>📊 7 jours</h4><canvas id="weeklyChart" width="300" height="150"></canvas></div>`;
         this.drawWeeklyChart();
-    }
-    calculateStreak() {
-        let streak = 0;
-        const today = new Date();
-        for (let i = 0; i < 365; i++) {
-            const d = new Date(today); d.setDate(d.getDate() - i);
-            const ds = d.toISOString().split('T')[0];
-            if (this.data.tasks.some(t => t.completedAt && t.completedAt.split('T')[0] === ds)) streak++;
-            else if (i > 0) break;
-        }
-        return streak;
     }
     drawWeeklyChart() {
         const canvas = document.getElementById('weeklyChart'); if (!canvas) return;
@@ -1107,93 +667,42 @@ class UltraTodoApp {
         for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); const ds = d.toISOString().split('T')[0]; days.push({ label: d.toLocaleDateString('fr-FR', { weekday: 'short' }), count: this.data.tasks.filter(t => t.completedAt && t.completedAt.split('T')[0] === ds).length }); }
         const maxVal = Math.max(...days.map(d => d.count), 1);
         const bw = 30, gap = 8, sx = 15, by = canvas.height - 25;
-        days.forEach((d, i) => { const h = (d.count / maxVal) * (by - 20); ctx.fillStyle = '#6c5ce7'; ctx.fillRect(sx + i * (bw + gap), by - h, bw, h); ctx.fillStyle = '#636e72'; ctx.font = '10px Inter'; ctx.textAlign = 'center'; ctx.fillText(d.label, sx + i * (bw + gap) + bw/2, by + 12); ctx.fillText(d.count, sx + i * (bw + gap) + bw/2, by - h - 5); });
+        days.forEach((d, i) => { const h = (d.count / maxVal) * (by - 20); ctx.fillStyle = '#6c5ce7'; ctx.fillRect(sx + i * (bw + gap), by - h, bw, h); ctx.fillStyle = '#636e72'; ctx.font = '10px Inter'; ctx.textAlign = 'center'; ctx.fillText(d.label, sx + i * (bw + gap) + bw/2, by + 12); });
     }
 
     // ==================== PROJECTS ====================
     renderProjects(container) {
-        let html = `<h3 style="margin-bottom:15px;">📁 Projets</h3><div style="display:flex;gap:8px;margin-bottom:15px;"><input type="text" class="form-input" id="newProjectInput" placeholder="Nouveau projet..." style="flex:1;" onkeydown="if(event.key==='Enter')app.addProject()"><button class="btn btn-primary" style="width:auto;" onclick="app.addProject()">+</button></div>`;
+        let html = `<h3 style="margin-bottom:15px;">📁 Projets</h3><div style="display:flex;gap:8px;margin-bottom:15px;"><input type="text" class="form-input" id="newProjectInput" placeholder="Nouveau projet..." style="flex:1;"><button class="btn btn-primary" style="width:auto;" onclick="app.addProject()">+</button></div>`;
         if (this.data.projects.length === 0) html += `<div style="text-align:center;padding:30px;color:var(--text-muted);">Aucun projet</div>`;
-        else this.data.projects.forEach(p => {
-            const tasks = this.data.tasks.filter(t => t.project === p && !t.archived);
-            const done = tasks.filter(t => t.completed).length;
-            const prog = tasks.length > 0 ? Math.round((done / tasks.length) * 100) : 0;
-            html += `<div style="background:var(--card);border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:var(--shadow-sm);"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><strong>📁 ${p}</strong><span style="font-size:0.7rem;color:var(--text-muted);">${tasks.length} tâches</span></div><div style="background:var(--bg);height:6px;border-radius:3px;"><div style="height:100%;background:var(--primary);width:${prog}%;"></div></div><div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;">${prog}%</div></div>`;
-        });
+        else this.data.projects.forEach(p => { const tasks = this.data.tasks.filter(t => t.project === p); const done = tasks.filter(t => t.completed).length; const prog = tasks.length > 0 ? Math.round((done / tasks.length) * 100) : 0; html += `<div style="background:var(--card);border-radius:12px;padding:12px;margin-bottom:10px;"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><strong>📁 ${p}</strong><span style="font-size:0.7rem;">${tasks.length} tâches</span></div><div style="background:var(--bg);height:6px;border-radius:3px;"><div style="height:100%;background:var(--primary);width:${prog}%;"></div></div></div>`; });
         container.innerHTML = html;
     }
-    addProject() {
-        const input = document.getElementById('newProjectInput');
-        if (!input || !input.value.trim()) return;
-        const name = input.value.trim();
-        if (!this.data.projects.includes(name)) { this.data.projects.push(name); this.saveData(); this.showToast('📁 Projet créé'); this.render(); }
-    }
+    addProject() { const input = document.getElementById('newProjectInput'); if (input && input.value.trim()) { this.data.projects.push(input.value.trim()); this.saveData(); this.showToast('📁 Projet créé'); this.render(); } }
 
     // ==================== TEMPLATES ====================
     renderTemplates(container) {
         let html = `<h3 style="margin-bottom:15px;">📦 Modèles</h3>`;
         if (this.data.templates.length === 0) html += `<div style="text-align:center;padding:30px;color:var(--text-muted);">Aucun modèle</div>`;
-        else this.data.templates.forEach(tpl => { html += `<div style="background:var(--card);border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:var(--shadow-sm);cursor:pointer;" onclick="app.applyTemplate('${tpl.id}')"><strong>📦 ${tpl.name}</strong><div style="font-size:0.7rem;color:var(--text-muted);">${tpl.tasks.length} tâches</div></div>`; });
-        html += `<h4 style="margin:15px 0 8px;">Créer</h4><input type="text" class="form-input" id="newTemplateName" placeholder="Nom" style="margin-bottom:8px;"><textarea class="form-textarea" id="newTemplateTasks" placeholder="Tâches (une par ligne)" style="margin-bottom:8px;"></textarea><button class="btn btn-primary" onclick="app.createProjectTemplate()">Créer</button>`;
+        else this.data.templates.forEach(tpl => { html += `<div style="background:var(--card);border-radius:12px;padding:12px;margin-bottom:10px;cursor:pointer;" onclick="app.applyTemplate('${tpl.id}')"><strong>📦 ${tpl.name}</strong><div style="font-size:0.7rem;">${tpl.tasks.length} tâches</div></div>`; });
+        html += `<h4 style="margin:15px 0 8px;">Créer</h4><input type="text" class="form-input" id="newTemplateName" placeholder="Nom" style="margin-bottom:8px;"><textarea class="form-textarea" id="newTemplateTasks" placeholder="Tâches (une par ligne)" style="margin-bottom:8px;"></textarea><button class="btn btn-primary" onclick="app.createTemplate()">Créer</button>`;
         container.innerHTML = html;
     }
-    applyTemplate(tplId) {
-        const tpl = this.data.templates.find(t => t.id === tplId);
-        if (!tpl) return;
-        tpl.tasks.forEach(title => { this.data.tasks.unshift({ id: this.generateId(), title, description: '', priority: 'medium', dueDate: null, dueTime: null, tags: [], status: 'todo', completed: false, createdAt: new Date().toISOString(), completedAt: null, subtasks: [], project: null, recurring: null, dependencies: [], archived: false }); });
-        this.saveData(); this.showToast('📦 Appliqué'); this.switchView('today', null);
-    }
-    createProjectTemplate() {
-        const name = document.getElementById('newTemplateName').value.trim();
-        const tasksText = document.getElementById('newTemplateTasks').value.trim();
-        if (!name || !tasksText) { this.showToast('Remplissez tout'); return; }
-        this.data.templates.push({ id: this.generateId(), name, tasks: tasksText.split('\n').map(s => s.trim()).filter(s => s) });
-        this.saveData(); this.showToast('📦 Créé'); this.render();
+    applyTemplate(tplId) { const tpl = this.data.templates.find(t => t.id === tplId); if (tpl) { tpl.tasks.forEach(title => { this.data.tasks.unshift({ id: this.generateId(), title, description: '', priority: 'medium', dueDate: null, dueTime: null, tags: [], status: 'todo', completed: false, createdAt: new Date().toISOString(), completedAt: null, subtasks: [], project: null, recurring: null, dependencies: [], archived: false }); }); this.saveData(); this.showToast('📦 Appliqué'); this.render(); } }
+    createTemplate() { const name = document.getElementById('newTemplateName').value.trim(); const tasksText = document.getElementById('newTemplateTasks').value.trim(); if (name && tasksText) { this.data.templates.push({ id: this.generateId(), name, tasks: tasksText.split('\n').map(s => s.trim()).filter(s => s) }); this.saveData(); this.showToast('📦 Créé'); this.render(); } }
+
+    // ==================== MIND MAP (simplifié) ====================
+    renderMindMap(container) {
+        const tasks = this.data.tasks.filter(t => !t.archived);
+        container.innerHTML = `<h3 style="margin-bottom:15px;">🧠 Mind Map</h3><div class="mindmap-container" id="mindmapContainer"><div style="display:flex;flex-wrap:wrap;gap:10px;padding:20px;">${tasks.map(t => `<div style="background:var(--card);border:2px solid var(--primary);border-radius:10px;padding:8px 12px;font-size:0.8rem;cursor:pointer;">${t.completed ? '✅' : '○'} ${t.title.substring(0, 30)}</div>`).join('')}</div></div>`;
     }
 
     // ==================== EXPORT/IMPORT ====================
     exportData(format) {
-        if (format === 'csv') {
-            let csv = 'Titre;Priorité;Date;Projet;Tags;Statut\n';
-            this.data.tasks.forEach(t => { csv += `"${t.title}";${t.priority};${t.dueDate||''};${t.project||''};"${t.tags.join(',')}";${t.status}\n`; });
-            this.downloadFile(csv, 'taches.csv', 'text/csv');
-        } else this.downloadFile(JSON.stringify(this.data), 'backup.json', 'application/json');
+        if (format === 'csv') { let csv = 'Titre;Priorité;Date;Projet;Statut\n'; this.data.tasks.forEach(t => { csv += `"${t.title}";${t.priority};${t.dueDate||''};${t.project||''};${t.status}\n`; }); this.downloadFile(csv, 'taches.csv', 'text/csv'); }
+        else this.downloadFile(JSON.stringify(this.data), 'backup.json', 'application/json');
     }
-    downloadFile(content, filename, type) {
-        const blob = new Blob([content], { type });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href = url; a.download = filename; a.click();
-        URL.revokeObjectURL(url);
-    }
-    importData() {
-        const input = document.createElement('input'); input.type = 'file'; input.accept = '.json';
-        input.onchange = (e) => { const f = e.target.files[0]; if (f) { const r = new FileReader(); r.onload = (ev) => { try { this.data = JSON.parse(ev.target.result); this.saveData(); this.render(); this.showToast('✅ Importé'); } catch(err) { this.showToast('❌ Invalide'); } }; r.readAsText(f); } };
-        input.click();
-    }
-    openSettings() {
-        const modalHTML = `<div class="modal-overlay active"><div class="modal-sheet"><div class="modal-handle"></div><h3 class="modal-title">⚙️ Paramètres</h3><div class="form-group"><label class="form-label">Mot de passe</label><input type="password" class="form-input" id="settingPassword" placeholder="Laisser vide"></div><div style="display:flex;gap:10px;"><button class="btn" onclick="app.closeModal()">Annuler</button><button class="btn btn-primary" onclick="app.saveSettings()">Enregistrer</button></div></div></div>`;
-        document.getElementById('modalContainer').innerHTML = modalHTML;
-    }
-    saveSettings() { const pwd = document.getElementById('settingPassword').value; if (pwd) this.data.settings.masterPassword = pwd; this.saveData(); this.closeModal(); this.showToast('✅ Enregistré'); }
-    lockApp() {
-        if (!this.data.settings.masterPassword) { const pwd = prompt('Définir mot de passe :'); if (pwd) { this.data.settings.masterPassword = pwd; this.saveData(); this.showToast('🔒 Défini'); } }
-        else { const pwd = prompt('Mot de passe :'); if (pwd === this.data.settings.masterPassword) this.showToast('🔓 Déverrouillé'); else this.showToast('❌ Incorrect'); }
-    }
-    checkReminders() {
-        setInterval(() => {
-            if ('Notification' in window && Notification.permission === 'granted') {
-                this.data.tasks.forEach(task => {
-                    if (task.dueDate && !task.completed && !task.reminded) {
-                        const due = new Date(task.dueDate);
-                        if (task.dueTime) { const [h, m] = task.dueTime.split(':').map(Number); due.setHours(h, m, 0, 0); }
-                        const diff = (due - new Date()) / (1000 * 60 * 60);
-                        if (diff <= 1 && diff > 0) { new Notification('Rappel: ' + task.title, { body: 'Échéance: ' + this.formatDate(task.dueDate) }); task.reminded = true; this.saveData(); }
-                    }
-                });
-            }
-        }, 60000);
-    }
-    formatDate(dateStr) { return dateStr ? new Date(dateStr).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : ''; }
+    downloadFile(content, filename, type) { const blob = new Blob([content], { type }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename; a.click(); URL.revokeObjectURL(url); }
+    importData() { const input = document.createElement('input'); input.type = 'file'; input.accept = '.json'; input.onchange = (e) => { const f = e.target.files[0]; if (f) { const r = new FileReader(); r.onload = (ev) => { try { this.data = JSON.parse(ev.target.result); this.saveData(); this.render(); this.showToast('✅ Importé'); } catch(err) { this.showToast('❌ Invalide'); } }; r.readAsText(f); } }; input.click(); }
 }
 
 const app = new UltraTodoApp();
